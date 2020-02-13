@@ -20,7 +20,14 @@ class Firebase {
 
     // AUTH API. Do this:
     doCreateUserWithEmailAndPassword = (email, password) => {
-        this.auth.createUserWithEmailAndPassword(email, password);
+        console.log("doCreateUserWithEmailAndPassword(): email,password:", email, password);
+        this.auth.createUserWithEmailAndPassword(email, password)
+            .then( response => {
+                console.log("doCreate...blaBla..(): ", response);
+            }).catch(error => {
+                console.log('[Firebase.js] error', error);
+                alert('[Firebase.js] error', error);
+            });
     }
 
     doSignInWithEmailAndPassword     = (email, password) => {

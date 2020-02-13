@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
 
+import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const SignUpPage = () => (
@@ -18,7 +20,7 @@ const INITIAL_STATE = {
     error      : null,
 };
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
     constructor(props){
         super(props);
 
@@ -27,16 +29,31 @@ class SignUpForm extends Component {
         this.state = {...INITIAL_STATE};
     }
 
-    onSubmit = event => {};
+    onSubmit = event => {
+        alert("I am onSubmit");
+        event.preventDefault();
+        //event.stopPropagation();
+        alert("after event.stopPropagation()");
+        const { username, email, passwordOne } = this.state;
+
+        // then block is a callback
+        this.props.firebase
+            .doCreateUserWithEmailAndPassword(email, passwordOne)
+            .then(authUser => {
+                console.log("[SignUp.js] authUser object: ", authUser);
+                alert(authUser);
+                this.setState({ ...INITIAL_STATE });
+                this.props.history.push(ROUTES.HOME);
+            })
+            .catch(error => {
+                alert('error', error);
+                this.setState({ error });
+            });
+        
+    };
 
     onChange = event => {
-        //console.log("START onChange");
-        const insertObject = {};
-        const key          = event.target.name;
-        const value        = event.target.value;
-        insertObject[key]  = value;
-        //console.log(insertObject);
-        this.setState(insertObject);
+        this.setState({ [event.target.name]: event.target.value });
     };
 
     render(){
@@ -62,7 +79,7 @@ class SignUpForm extends Component {
             <form onSubmit={this.onSubmit}>
                 <input
                     name="username"
-                    value={this.state.username}
+                    value={username}
                     onChange={this.onChange}
                     type="text"
                     placeholder="Full Name"
@@ -88,7 +105,7 @@ class SignUpForm extends Component {
                     type="password"
                     placeholder="Confirm Password"
                 />
-                <button disabled={isInvalid} type="submit">Sign Up</button>
+                <button disabled={isInvalid} onClick={this.onSubmit}>Sign Up</button>
                 {error && <p>{error.message}</p>}
             </form>
         );
@@ -100,6 +117,11 @@ const SignUpLink = () => (
         Don't have an account ? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
     </p>
 );
+
+const SignUpForm = compose(
+    withRouter,
+    withFirebase,
+)(SignUpFormBase);
 
 export default SignUpPage;
 

@@ -13,7 +13,7 @@ const Navigation = () => (
                 <Link to={ROUTES.SIGN_UP}>SIGN UP</Link>
             </li>
             <li>
-                <Link to={ROUTES.LANDING}>Landing</Link>
+                <Link to={ROUTES.LANDING}>Landing</Link> 
             </li>
             <li>
                 <Link to={ROUTES.HOME}>Home</Link>
