@@ -29,12 +29,67 @@ class SignUpForm extends Component {
 
     onSubmit = event => {};
 
-    onChange = event => {};
+    onChange = event => {
+        //console.log("START onChange");
+        const insertObject = {};
+        const key          = event.target.name;
+        const value        = event.target.value;
+        insertObject[key]  = value;
+        //console.log(insertObject);
+        this.setState(insertObject);
+    };
 
     render(){
+
+        const {
+            username,
+            email,
+            passwordOne,
+            passwordTwo,
+            error,
+        } = this.state;
+
+        const isInvalid = 
+            passwordOne !== passwordTwo ||
+            passwordOne === ''          ||
+            email       === ''          ||
+            username    === ''          ;
+
+        console.log("Is Invalid: ", isInvalid);
+        //console.log("this.onChange: ", this.onChange);
+
         return(
             <form onSubmit={this.onSubmit}>
-
+                <input
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.onChange}
+                    type="text"
+                    placeholder="Full Name"
+                />
+                <input
+                    name="email"
+                    value={email}
+                    onChange={this.onChange}
+                    type="text"
+                    placeholder="Email Address"
+                />
+                <input
+                    name="passwordOne"
+                    value={passwordOne}
+                    onChange={this.onChange}
+                    type="password"
+                    placeholder="Password"
+                />
+                <input
+                    name="passwordTwo"
+                    value={passwordTwo}
+                    onChange={this.onChange}
+                    type="password"
+                    placeholder="Confirm Password"
+                />
+                <button disabled={isInvalid} type="submit">Sign Up</button>
+                {error && <p>{error.message}</p>}
             </form>
         );
     }    
