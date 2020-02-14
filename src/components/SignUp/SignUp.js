@@ -30,25 +30,25 @@ class SignUpFormBase extends Component {
     }
 
     onSubmit = event => {
-        alert("I am onSubmit");
+        alert("[SignUp.js] I am onSubmit");
         event.preventDefault();
         //event.stopPropagation();
-        alert("after event.stopPropagation()");
+        alert("[SignUp.js] after event.stopPropagation()");
         const { username, email, passwordOne } = this.state;
 
         // then block is a callback
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
-            .then(authUser => {
-                console.log("[SignUp.js] authUser object: ", authUser);
-                alert(authUser);
-                this.setState({ ...INITIAL_STATE });
-                this.props.history.push(ROUTES.HOME);
-            })
-            .catch(error => {
-                alert('error', error);
-                this.setState({ error });
-            });
+             .then(authUser => {
+                 console.log("[SignUp.js] authUser object: ", authUser);
+                 alert(authUser);
+                 this.setState({ ...INITIAL_STATE });
+                 this.props.history.push(ROUTES.HOME);
+             })
+             .catch(error => {
+                 alert('error', error);
+                 this.setState({ error });
+             });
         
     };
 

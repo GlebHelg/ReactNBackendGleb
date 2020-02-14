@@ -1,4 +1,4 @@
-import * as FIREBASE_CONST_ from './FIREBASE_CONSTANTS';
+import * as FIREBASE_CONST_ from './FIREBASE_CONSTANTS.env';
 
 import app from 'firebase/app';
 import 'firebase/auth';
@@ -21,21 +21,24 @@ class Firebase {
     // AUTH API. Do this:
     doCreateUserWithEmailAndPassword = (email, password) => {
         console.log("doCreateUserWithEmailAndPassword(): email,password:", email, password);
-        this.auth.createUserWithEmailAndPassword(email, password)
-            .then( response => {
-                console.log("doCreate...blaBla..(): ", response);
-            }).catch(error => {
-                console.log('[Firebase.js] error', error);
-                alert('[Firebase.js] error', error);
-            });
+        return this.auth.createUserWithEmailAndPassword(email, password);
+        //    .then( response => {
+        //        console.log("[Firebase.js] doCreate...blaBla..(): ", response);
+        //    }).catch(error => {
+        //        console.log('[Firebase.js] error', error);
+        //        alert('[Firebase.js] error', error);
+        //    });
     }
 
     doSignInWithEmailAndPassword     = (email, password) => {
-        this.auth.signInWithEmailAndPassword(email, password);
+        return this.auth.signInWithEmailAndPassword(email, password);
     } 
 
     doSignOut = () => {
-        this.auth.signOut();
+        this.auth.signOut()
+            .then(response => {
+                console.log(response);
+            });
     }
 
     doPasswordReset = (email) => {
